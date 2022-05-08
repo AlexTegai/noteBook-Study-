@@ -4,4 +4,7 @@
     <string name="empty">Empty</string>
     <string name="new_note">New Note</string>
     <string name="add_new_image">Add New Image</string>
+    <string name="add_title">Add title</string>
+    <string name="add_description">Add description</string>
+    <string name="plug">textView</string>
 </resources>

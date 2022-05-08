@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,6 +15,8 @@ class EditActivity : AppCompatActivity() {
 
     private val notebookDbManager = NotebookDbManager(this)
     private var launcher: ActivityResultLauncher<Intent>? = null
+
+    private var tempImageUri = "empty"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,12 +32,6 @@ class EditActivity : AppCompatActivity() {
                 onNewImageButtonPressed()
             }
 
-//            saveFloatingButton.setOnClickListener {
-//                onSaveNoteButtonPressed(
-//                    editTitle.toString(), editContent.toString(),
-//                )
-//            }
-
             editAvatarButton.setOnClickListener {
                 editAvatarButtonPressed()
             }
@@ -44,20 +39,45 @@ class EditActivity : AppCompatActivity() {
             deleteAvatarButton.setOnClickListener {
                 deleteAvatarButtonPressed()
             }
+
+            saveFloatingButton.setOnClickListener {
+                onSaveNoteButtonPressed(
+                    editTitle.text.toString(), editContent.text.toString(), tempImageUri
+                )
+            }
         }
 
         launcher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result: ActivityResult ->
-           if (result.resultCode == RESULT_OK) {
-               binding.imageAvatar.setImageURI(result.data?.data)
-           }
+            if (result.resultCode == RESULT_OK) {
+                binding.imageAvatar.setImageURI(result.data?.data)
+                tempImageUri = result.data?.data.toString()
+            }
         }
+
+        checkContentIsNotEmpty()
     }
 
     override fun onDestroy() {
         super.onDestroy()
         notebookDbManager.closeDb()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        notebookDbManager.openDb()
+    }
+
+    private fun onBackButtonPressed() {
+        finish()
+    }
+
+    private fun onNewImageButtonPressed() {
+        binding.apply {
+            avatarContainer.visibility = View.VISIBLE
+            newImageButton.visibility = View.GONE
+        }
     }
 
     private fun editAvatarButtonPressed() {
@@ -73,24 +93,26 @@ class EditActivity : AppCompatActivity() {
         }
     }
 
-    private fun onBackButtonPressed() {
-        Toast.makeText(this, "Back", Toast.LENGTH_SHORT).show()
+    private fun onSaveNoteButtonPressed(title: String, content: String, image: String) {
+        if (title.isNotBlank() && content.isNotBlank()) {
+            notebookDbManager.insertToDb(title, content, image)
+        }
+        finish()
     }
 
-    private fun onNewImageButtonPressed() {
-        binding.apply {
-            avatarContainer.visibility = View.VISIBLE
-            newImageButton.visibility = View.GONE
+    private fun checkContentIsNotEmpty() {
+        if (intent != null) {
+            if (intent.getStringExtra(INTENT_TITLE_KEY) != null) {
+                binding.editTitle.setText(intent.getStringExtra(INTENT_TITLE_KEY))
+                binding.editContent.setText(intent.getStringExtra(INTENT_DESCRIPTION_KEY))
+            }
         }
     }
 
-//    private fun onSaveNoteButtonPressed(title: String, content: String, image: String) {
-//        if (title.isNotBlank() || content.isNotBlank()) {
-//            notebookDbManager.apply {
-//                openDb()
-//                insertToDb(title, content, image)
-//            }
-//        }
-//    }
+    companion object {
 
+        private const val INTENT_TITLE_KEY = "TITLE_KEY"
+        private const val INTENT_DESCRIPTION_KEY = "DESCRIPTION_KEY"
+
+    }
 }

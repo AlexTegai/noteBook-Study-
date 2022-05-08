@@ -34,7 +34,7 @@ private const val CREATE_TABLE =
     "CREATE TABLE IF NOT EXISTS ${NotebookContract.TABLE_NAME} (" +
             "${BaseColumns._ID} INTEGER PRIMARY KEY," +
             "${NotebookContract.COLUMN_NAME_TITLE} TEXT," +
-            "${NotebookContract.COLUMN_NAME_CONTENT} TEXT," +
+            "${NotebookContract.COLUMN_NAME_DESCRIPTION} TEXT," +
             "${NotebookContract.COLUMN_NAME_IMAGE_URI} TEXT)"
 
 private const val DELETE_TABLE =
