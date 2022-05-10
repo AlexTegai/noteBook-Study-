@@ -10,4 +10,5 @@
     <color name="mint">#CDDC39</color>
     <color name="grey">#6C6A6A</color>
     <color name="yellow">#FFEB3B</color>
+    <color name="edit_text_dark">#202020</color>
 </resources>

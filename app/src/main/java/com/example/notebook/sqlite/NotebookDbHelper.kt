@@ -4,6 +4,11 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
+import com.example.notebook.sqlite.NotebookContract.COLUMN_NAME_DESCRIPTION
+import com.example.notebook.sqlite.NotebookContract.COLUMN_NAME_IMAGE_URI
+import com.example.notebook.sqlite.NotebookContract.COLUMN_NAME_TIME
+import com.example.notebook.sqlite.NotebookContract.COLUMN_NAME_TITLE
+import com.example.notebook.sqlite.NotebookContract.TABLE_NAME
 
 class NotebookDbHelper(
     context: Context
@@ -31,13 +36,14 @@ class NotebookDbHelper(
 }
 
 private const val CREATE_TABLE =
-    "CREATE TABLE IF NOT EXISTS ${NotebookContract.TABLE_NAME} (" +
+    "CREATE TABLE IF NOT EXISTS $TABLE_NAME (" +
             "${BaseColumns._ID} INTEGER PRIMARY KEY," +
-            "${NotebookContract.COLUMN_NAME_TITLE} TEXT," +
-            "${NotebookContract.COLUMN_NAME_DESCRIPTION} TEXT," +
-            "${NotebookContract.COLUMN_NAME_IMAGE_URI} TEXT)"
+            "$COLUMN_NAME_TITLE TEXT," +
+            "$COLUMN_NAME_DESCRIPTION TEXT," +
+            "$COLUMN_NAME_IMAGE_URI TEXT," +
+            "$COLUMN_NAME_TIME TEXT)"
 
 private const val DELETE_TABLE =
-    "DROP TABLE IF EXISTS ${NotebookContract.TABLE_NAME}"
+    "DROP TABLE IF EXISTS $TABLE_NAME"
 
 

@@ -7,4 +7,6 @@
     <string name="add_title">Add title</string>
     <string name="add_description">Add description</string>
     <string name="plug">textView</string>
+    <string name="notebook">NOTEBOOK</string>
+    <string name="time">time</string>
 </resources>
